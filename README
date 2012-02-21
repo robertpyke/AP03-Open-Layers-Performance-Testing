@@ -1,0 +1,7 @@
+Author: Robert Pyke
+
+This code provides a set of web pages to do performance tests on Open Layers.
+
+The intention is that the code will look at different methods of displaying 100s of thousands of markers. 
+
+Both server side and client side processing options will be explored.
