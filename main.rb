@@ -3,7 +3,7 @@ require 'json'
 require './lib/location'
 
 
-get '/locations/?' do
+get '/locations.json?' do
 	content_type :json
 	count = params[:count].to_i
 
@@ -16,5 +16,5 @@ get '/locations/?' do
 end
 
 get '*' do
-	redirect '/locations/?count=10'
+	redirect '/locations.json?count=10'
 end
