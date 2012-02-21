@@ -1,7 +1,20 @@
 require 'sinatra'
 require 'json'
+require './lib/location'
 
-get '/sushi.json' do
-  content_type :json
-  return {:sushi => ["Maguro", "Hamachi", "Uni", "Saba", "Ebi", "Sake", "Tai"]}.to_json
+
+get '/locations/?' do
+	content_type :json
+	count = params[:count].to_i
+
+	locations = []
+	count.times do |nth_time|
+		locations << Location.generate_random.to_json
+	end
+
+	return { :locations => locations }.to_json
+end
+
+get '*' do
+	redirect '/locations/?count=10'
 end
