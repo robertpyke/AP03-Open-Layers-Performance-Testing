@@ -1,1 +1,1 @@
-web: bundle exec thin start -p $PORT
+web: bundle exec ruby main.rb -p $PORT
