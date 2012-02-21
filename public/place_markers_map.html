@@ -33,21 +33,28 @@
 				map.addLayer(markers_layer);
 
 				var count = prompt("Marker Count","1000");
-				console.log('before get');
+				var d = new Date();
+				var before_get_time = d.getTime();
+				console.log('before get. time in ms: ' + before_get_time );
 				$.get( ('locations.json?count=' + count), function(data) {
 					var d = new Date();
-					var before_time = d.getTime();
-					console.log('before for loop. time in ms: ' + before_time);
+					var before_loop_time = d.getTime();
+					console.log('before for loop. time in ms: ' + before_loop_time);
 					$.each(data['locations'], function(index, loc) {
 						var lat = loc['lat'];
 						var lng = loc['lng'];
 						markers_layer.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lng, lat)));
 					});
 					var d = new Date();
-					var after_time = d.getTime();
-					var took = after_time - before_time;
-					console.log('after for loop. time in ms: ' + after_time);
-					console.log('took ' + took + 'ms to process ' + count);
+					var after_loop_time = d.getTime();
+
+					var get_took = before_loop_time - before_get_time;
+					var loop_took = after_loop_time - before_loop_time;
+					var total_took = after_loop_time - before_get_time;
+
+					console.log('get took ' + get_took + 'ms');
+					console.log('for loop took ' + loop_took + 'ms');
+					console.log('total time incl. get and loop took ' + total_took + 'ms for ' + count + ' markers');
 					alert("finished processing markers. Please see console log for time information.");
 				});
 
