@@ -13,7 +13,7 @@ class Location
 		return Location.new(lat, lng)
 	end
 
-	def to_json
+	def to_hash
 		return { :lat => @lat, :lng => @lng }
 	end
 end

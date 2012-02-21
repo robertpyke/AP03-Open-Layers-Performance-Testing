@@ -12,7 +12,7 @@ get '/locations.json?' do
 
 	locations = []
 	count.times do |nth_time|
-		locations << Location.generate_random.to_json
+		locations << Location.generate_random.to_hash
 	end
 
 	return { :locations => locations }.to_json
