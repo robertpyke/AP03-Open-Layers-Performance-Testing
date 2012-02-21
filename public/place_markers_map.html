@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<link href='stylesheets/screen.css' rel='stylesheet'></link>
+
+		<!-- Connect to the google api -->
+		<script type="text/javascript" src="https://www.google.com/jsapi?key=AIzaSyAmX6UOsuiIrSV_p3pUL8pelYLw8AnBTjU"></script>
+		<!-- Use google.load to load different google apis -->
+		<script language="Javascript", type="text/javascript">
+			// Load in jquery
+			google.load("jquery", "1.7.1");
+			// Load in jqueryui
+			google.load("jqueryui", "1.8.16");
+		</script>
+
+		<!-- Get the open layers api -->
+		<script src="http://openlayers.org/api/OpenLayers.js"></script>
+		<script>
+			var map, layer, markers, icon;
+
+			function init(){
+				var map = new OpenLayers.Map('map');
+
+				var wms = new OpenLayers.Layer.WMS(
+					"OpenLayers WMS",
+					"http://vmap0.tiles.osgeo.org/wms/vmap0",
+					{'layers':'basic'} 
+				);
+				map.addLayer(wms);
+				map.zoomToMaxExtent();
+
+				markers_layer = new OpenLayers.Layer.Markers( "Markers" );
+				map.addLayer(markers_layer);
+
+				var count = prompt("Marker Count","1000");
+				console.log('before get');
+				$.get( ('locations.json?count=' + count), function(data) {
+					var d = new Date();
+					var before_time = d.getTime();
+					console.log('before for loop. time in ms: ' + before_time);
+					$.each(data['locations'], function(index, loc) {
+						var lat = loc['lat'];
+						var lng = loc['lng'];
+						markers_layer.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lng, lat)));
+					});
+					var d = new Date();
+					var after_time = d.getTime();
+					var took = after_time - before_time;
+					console.log('after for loop. time in ms: ' + after_time);
+					console.log('took ' + took + 'ms to process ' + count);
+					alert("finished processing markers. Please see console log for time information.");
+				});
+
+			}
+
+		</script>
+
+	</head>
+	<body onload='init()'>
+		<div id='map'></div>
+	</body>
+</html>

@@ -6,9 +6,11 @@ class Location
 		@lng = lng
 	end
 
-	# Generates a lat and lng between 0 and 10
+	# Generates a lat and lng between 0 and 100
 	def Location::generate_random
-		return Location.new(rand(10000) / 1000.0, rand(10000) / 1000.0)
+		lat =  ( rand(180) / 1 ) - 90
+		lng =  ( rand(360) / 1 ) - 180
+		return Location.new(lat, lng)
 	end
 
 	def to_json

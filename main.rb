@@ -2,6 +2,9 @@ require 'sinatra'
 require 'json'
 require './lib/location'
 
+get '/' do
+	redirect '/locations.json?count=10'
+end
 
 get '/locations.json?' do
 	content_type :json
@@ -13,8 +16,4 @@ get '/locations.json?' do
 	end
 
 	return { :locations => locations }.to_json
-end
-
-get '*' do
-	redirect '/locations.json?count=10'
 end
