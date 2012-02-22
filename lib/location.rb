@@ -8,8 +8,8 @@ class Location
 
 	# Generates a lat and lng between 0 and 100
 	def Location::generate_random
-		lat =  ( rand(180) / 1 ) - 90
-		lng =  ( rand(360) / 1 ) - 180
+		lat =  ( rand(18000) / 100.0 ) - 90
+		lng =  ( rand(36000) / 100.0 ) - 180
 		return Location.new(lat, lng)
 	end
 
