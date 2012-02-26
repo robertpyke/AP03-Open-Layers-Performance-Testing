@@ -20,7 +20,7 @@
 
 			// create a semi-random grid of features to be clustered
 			var features = [];
-			var count = 1;
+			var count = prompt("Marker Count","1000");
 			$.get( ('locations.json?count=' + count), function(data) {
 				$.each(data['locations'], function(index, loc) {
 					var lat = loc['lat'];
