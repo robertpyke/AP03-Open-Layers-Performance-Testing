@@ -62,7 +62,11 @@
 					}
 				}
 			});
-						
+
+			// See: http://dev.openlayers.org/apidocs/files/OpenLayers/Strategy/Cluster-js.html
+			// for OpenLayers.Strategy.Cluster documentation
+			//   distance:  {Integer} Pixel distance between features that should be considered a single cluster.
+			//   threshold: {Integer} Optional threshold below which original features will be added to the layer instead of clusters.
 			strategy = new OpenLayers.Strategy.Cluster();
 
 			clusters = new OpenLayers.Layer.Vector("Clusters", {
@@ -93,7 +97,7 @@
 
 		function reset() {
 			var distance = 10;
-			var threshold = 1;
+			var threshold = null;
 			strategy.distance = distance || strategy.distance;
 			strategy.threshold = threshold || strategy.threshold;
 			clusters.removeFeatures(clusters.features);
