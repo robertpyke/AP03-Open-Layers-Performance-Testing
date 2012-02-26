@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<link href='stylesheets/screen.css' rel='stylesheet'></link>
+		<title>place markers basic cluster</title>
+
+		<!-- Connect to the google api -->
+		<script type="text/javascript" src="https://www.google.com/jsapi?key=AIzaSyAmX6UOsuiIrSV_p3pUL8pelYLw8AnBTjU"></script>
+		<!-- Use google.load to load different google apis -->
+		<script type="text/javascript">
+			// Load in jquery
+			google.load("jquery", "1.7.1");
+			// Load in jqueryui
+			google.load("jqueryui", "1.8.16");
+		</script>
+
+		<!-- Get the open layers api -->
+		<script src="http://openlayers.org/api/OpenLayers.js"></script>
+		<script type="text/javascript">
+
+			// create a semi-random grid of features to be clustered
+			var features = [];
+			var count = 1;
+			$.get( ('locations.json?count=' + count), function(data) {
+				$.each(data['locations'], function(index, loc) {
+					var lat = loc['lat'];
+					var lng = loc['lng'];
+					features.push(new OpenLayers.Feature.Vector(
+						new OpenLayers.Geometry.Point(lat, lng), {x: lat, y: lng}
+					));
+				});
+				reset();
+			});
+
+			var map, strategy, clusters;
+			function init() {
+				map = new OpenLayers.Map('map');
+				var base = new OpenLayers.Layer.WMS(
+					"OpenLayers WMS",
+					"http://vmap0.tiles.osgeo.org/wms/vmap0",
+					{'layers':'basic'} 
+				);
+
+				var style = new OpenLayers.Style({
+					pointRadius: "${radius}",
+					fillColor: "#ffcc66",
+					fillOpacity: 0.8,
+					strokeColor: "#cc6633",
+					strokeWidth: "${width}",
+					strokeOpacity: 0.8
+				}, {
+				context: {
+					width: function(feature) {
+						return (feature.cluster) ? 2 : 1;
+					},
+					radius: function(feature) {
+						var pix = 2;
+						if(feature.cluster) {
+							pix = Math.min(feature.attributes.count, 7) + 2;
+						}
+						return pix;
+					}
+				}
+			});
+						
+			strategy = new OpenLayers.Strategy.Cluster();
+
+			clusters = new OpenLayers.Layer.Vector("Clusters", {
+				strategies: [strategy],
+				styleMap: new OpenLayers.StyleMap({
+					"default": style,
+					"select": {
+						fillColor: "#8aeeef",
+						strokeColor: "#32a8a9"
+					}
+				})
+			});
+				
+			var select = new OpenLayers.Control.SelectFeature(
+				clusters, {hover: true}
+			);
+			map.addControl(select);
+			select.activate();
+			clusters.events.on({"featureselected": display});
+
+			map.addLayers([base, clusters]);
+			map.zoomToMaxExtent();
+
+			reset();
+//			$("reset").onclick = reset;
+
+		}
+
+		function reset() {
+			var distance = 10;
+			var threshold = 1;
+			strategy.distance = distance || strategy.distance;
+			strategy.threshold = threshold || strategy.threshold;
+			clusters.removeFeatures(clusters.features);
+			clusters.addFeatures(features);
+		}
+
+		function display(event) {
+			var f = event.feature;
+			var el = $("#output");
+			if(f.cluster) {
+				el.html("cluster of " + f.attributes.count);
+			} else {
+				el.html("unclustered " + f.geometry);
+			}
+		}
+	</script>
+
+	</head>
+	<body onload='init()'>
+		<p id='output'>Output place holder</p>
+		<div id='map'></div>
+	</body>
+</html>
