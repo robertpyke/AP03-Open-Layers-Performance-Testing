@@ -70,7 +70,7 @@
 			strategy = new OpenLayers.Strategy.Cluster();
 
 			clusters = new OpenLayers.Layer.Vector("Clusters", {
-				//strategies: [strategy],
+				strategies: [strategy],
 				styleMap: new OpenLayers.StyleMap({
 					"default": style,
 					"select": {
