@@ -26,7 +26,7 @@
 					var lat = loc['lat'];
 					var lng = loc['lng'];
 					features.push(new OpenLayers.Feature.Vector(
-						new OpenLayers.Geometry.Point(lat, lng), {x: lat, y: lng}
+						new OpenLayers.Geometry.Point(lng, lat), {x: lng, y: lat}
 					));
 				});
 				reset();
